@@ -11,7 +11,6 @@ dist
 dist-ssr
 *.local
 
-# Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -35,6 +34,7 @@ Dockerfile
 
 *.zip
 lambda/*.zip
+*.pem
 
 crash.log
 override.tf
