@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, Terminal } from "lucide-react";
 import { Button } from "../components/ui/button";
 
-import { ChevronDown, FileText, FileVideo } from "lucide-react";
+import { ChevronDown, FileText} from "lucide-react";
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
