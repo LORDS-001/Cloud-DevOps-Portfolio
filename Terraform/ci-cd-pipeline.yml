@@ -10,3 +10,4 @@ stages:
 
           # Apply the Terraform changes
           terraform apply -auto-approve
+
