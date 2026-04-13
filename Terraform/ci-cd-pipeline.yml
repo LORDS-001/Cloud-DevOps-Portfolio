@@ -1,0 +1,12 @@
+stages:
+  - name: Test
+    steps:
+      - script: |
+          # Initialize Terraform
+          terraform init
+
+          # Generate and print the Terraform plan
+          terraform plan
+
+          # Apply the Terraform changes
+          terraform apply -auto-approve
