@@ -1,13 +1,16 @@
 stages:
-  - name: Test
+  - name: Deploy_Infrastructure
     steps:
       - script: |
-          # Initialize Terraform
+          # 1. Initialize with a backend (Make sure your code has a backend block!)
           terraform init
 
-          # Generate and print the Terraform plan
-          terraform plan
+          # 2. Validate the configuration syntax
+          terraform validate
 
-          # Apply the Terraform changes
-          terraform apply -auto-approve
+          # 3. Save the plan to a file (Best Practice)
+          # This ensures that 'apply' uses the exact same plan that was reviewed
+          terraform plan -out=main.tfplan
 
+          # 4. Apply the saved plan
+          terraform apply -auto-approve main.tfplan
