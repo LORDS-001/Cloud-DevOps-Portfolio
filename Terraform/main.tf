@@ -1,49 +1,28 @@
-data "aws_vpc" "default" {
-  default = true
-}
-
-data "aws_subnets" "default" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.default.id]
-  }
-}
-resource "aws_security_group" "allow_ssh" {
-  name        = "allow_ssh_access"
-  description = "Allow SSH inbound traffic"
-  vpc_id      = data.aws_vpc.default.id
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-resource "aws_instance" "portfolio_vm" {
-  ami           = "ami-0c7217cdde317cfec"
-  instance_type = "t2.micro"
-  
-  subnet_id = data.aws_subnets.default.ids[0]
-
-  vpc_security_group_ids = [aws_security_group.allow_ssh.id]
+resource "aws_vpc" "portfolio_vpc" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_hostnames = true
+  enable_dns_support   = true
 
   tags = {
-    Name = "DevOps-Portfolio-VM"
+    Name = "Portfolio-VPC"
   }
 }
 
-terraform {
-  backend "s3" {
-    bucket = "your-unique-terraform-state-bucket"
-    key    = "state/terraform.tfstate"
-    region = "us-east-1"
+resource "aws_subnet" "public_subnet" {
+  vpc_id                  = aws_vpc.portfolio_vpc.id
+  cidr_block              = "10.0.1.0/24"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "Lords-Public-Subnet"
   }
 }
+
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.portfolio_vpc.id
+
+  tags = {
+    Name = "Lords-VPC-IGW"
+  }
+}
+
